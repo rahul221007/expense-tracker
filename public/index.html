@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Expense Tracker</h1>
+    </header>
+
+    <!-- ── Add expense form ──────────────────────────────────── -->
+    <section class="card" aria-labelledby="form-heading">
+      <h2 id="form-heading">Add Expense</h2>
+
+      <form id="expense-form" novalidate>
+        <!--
+          idempotency_key is generated in JS and stored here as a hidden field.
+          It persists across retries; a new key is generated only after success.
+        -->
+        <input type="hidden" id="idempotency-key" />
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="amount">Amount (₹)</label>
+            <input
+              type="number"
+              id="amount"
+              name="amount"
+              min="0.01"
+              step="0.01"
+              placeholder="0.00"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date" required />
+          </div>
+
+          <div class="field">
+            <label for="category">Category</label>
+            <input
+              type="text"
+              id="category"
+              name="category"
+              list="category-suggestions"
+              placeholder="e.g. Food"
+              required
+              autocomplete="off"
+            />
+            <datalist id="category-suggestions"></datalist>
+          </div>
+
+          <div class="field field--wide">
+            <label for="description">Description</label>
+            <input
+              type="text"
+              id="description"
+              name="description"
+              placeholder="e.g. Lunch with team"
+              required
+            />
+          </div>
+        </div>
+
+        <div id="form-error" class="alert alert--error" hidden></div>
+
+        <div class="form-actions">
+          <button type="submit" id="submit-btn">Add Expense</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ── Filters ───────────────────────────────────────────── -->
+    <section class="card filters" aria-label="Filter and sort">
+      <div class="filter-row">
+        <div class="field">
+          <label for="filter-category">Filter by category</label>
+          <select id="filter-category">
+            <option value="">All categories</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="sort-order">Sort</label>
+          <select id="sort-order">
+            <option value="date_desc">Newest first</option>
+          </select>
+        </div>
+
+        <button id="clear-filters" class="btn-secondary">Clear filters</button>
+      </div>
+    </section>
+
+    <!-- ── Expense list ──────────────────────────────────────── -->
+    <section class="card" aria-labelledby="list-heading">
+      <div class="list-header">
+        <h2 id="list-heading">Expenses</h2>
+        <div id="total-display" class="total" aria-live="polite">Total: ₹—</div>
+      </div>
+
+      <div id="list-status" class="alert" hidden></div>
+
+      <div id="list-loading" class="loading-row" hidden>Loading…</div>
+
+      <div class="table-wrapper">
+        <table id="expense-table" aria-label="Expense list">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Category</th>
+              <th scope="col">Description</th>
+              <th scope="col" class="amount-col">Amount</th>
+            </tr>
+          </thead>
+          <tbody id="expense-tbody">
+            <!-- rows injected by app.js -->
+          </tbody>
+        </table>
+        <p id="empty-state" class="empty-state" hidden>No expenses found.</p>
+      </div>
+    </section>
+
+    <!-- ── Per-category summary ──────────────────────────────── -->
+    <section class="card" aria-labelledby="summary-heading" id="summary-section" hidden>
+      <h2 id="summary-heading">Summary by Category</h2>
+      <div class="table-wrapper">
+        <table id="summary-table" aria-label="Category summary">
+          <thead>
+            <tr>
+              <th scope="col">Category</th>
+              <th scope="col" class="amount-col">Total</th>
+            </tr>
+          </thead>
+          <tbody id="summary-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
