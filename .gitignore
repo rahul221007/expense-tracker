@@ -1,0 +1,8 @@
+node_modules/
+expenses.db
+*.db-journal
+*.db-shm
+*.db-wal
+.env
+.DS_Store
+coverage/
