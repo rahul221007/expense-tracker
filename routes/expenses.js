@@ -184,4 +184,23 @@ router.get('/', (req, res, next) => {
   }
 });
 
+// ---------------------------------------------------------------------------
+// GET /expenses/categories
+// Returns the sorted list of distinct categories that have been used.
+// The frontend uses this to build the filter dropdown dynamically so the
+// user only sees categories that actually exist.
+// ---------------------------------------------------------------------------
+
+router.get('/categories', (req, res, next) => {
+  try {
+    const db = getDb();
+    const rows = db.prepare(
+      "SELECT DISTINCT category FROM expenses ORDER BY category COLLATE NOCASE ASC"
+    ).all();
+    return res.json({ categories: rows.map(r => r.category) });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;
