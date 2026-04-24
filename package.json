@@ -2,7 +2,10 @@
   "name": "expense-tracker",
   "version": "1.0.0",
   "description": "Personal expense tracker — full-stack Node.js + SQLite",
-  "main": "server.js",
+  "main": "index.js",
+  "engines": {
+    "node": ">=22.5.0"
+  },
   "scripts": {
     "start": "node index.js",
     "dev": "node --watch index.js",
